@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Trailhead Notes — Trail Survey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #EEF0E7;
+    --card: #E4E8DA;
+    --ink: #1C2B22;
+    --ink-soft: #4B5D4E;
+    --line: #C7D0BC;
+    --blaze: #E2572B;
+    --blaze-ink: #FFFFFF;
+    --mustard: #C98A04;
+    --moss: #4B6B4D;
+    --focus: #2E4A33;
+    --radius: 3px;
+  }
+ 
+  * { box-sizing: border-box; }
+ 
+  html { color-scheme: light; }
+ 
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+ 
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(28,43,34,0.055) 1px, transparent 0);
+    background-size: 22px 22px;
+    z-index: 0;
+  }
+ 
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 64px 24px 96px;
+  }
+ 
+  /* ---------- Hero ---------- */
+ 
+  .trail-mark {
+    display: inline-flex;
+    gap: 4px;
+    margin-bottom: 22px;
+  }
+  .trail-mark span {
+    width: 13px;
+    height: 26px;
+    background: var(--blaze);
+  }
+  .trail-mark span:nth-child(2) { background: var(--mustard); }
+  .trail-mark span:nth-child(3) { background: var(--moss); }
+ 
+  h1#title {
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: clamp(2.2rem, 5vw, 3rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0 0 18px;
+    color: var(--ink);
+  }
+ 
+  p#description {
+    max-width: 52ch;
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    margin: 0 0 52px;
+  }
+ 
+  /* ---------- Form scaffold ---------- */
+ 
+  form#survey-form {
+    position: relative;
+  }
+ 
+  .stop {
+    position: relative;
+    padding-left: 34px;
+    padding-bottom: 46px;
+    border-left: 2px dashed var(--line);
+    margin-left: 6px;
+  }
+  .stop:last-of-type {
+    border-left-color: transparent;
+    padding-bottom: 0;
+  }
+ 
+  .stop::before {
+    content: "";
+    position: absolute;
+    left: -9px;
+    top: 2px;
+    width: 16px;
+    height: 16px;
+    background: var(--blaze-color, var(--blaze));
+    border: 3px solid var(--paper);
+    box-shadow: 0 0 0 2px var(--blaze-color, var(--blaze));
+  }
+ 
+  .stop.mustard { --blaze-color: var(--mustard); }
+  .stop.moss    { --blaze-color: var(--moss); }
+  .stop.ink     { --blaze-color: var(--ink); }
+ 
+  .stop h2 {
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 1.3rem;
+    margin: 0 0 6px;
+    color: var(--ink);
+  }
+ 
+  .stop .stop-note {
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+    margin: 0 0 22px;
+    max-width: 46ch;
+  }
+ 
+  /* ---------- Fields ---------- */
+ 
+  .field { margin-bottom: 20px; }
+  .field:last-child { margin-bottom: 0; }
+ 
+  label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 7px;
+    color: var(--ink);
+  }
+ 
+  input[type="text"],
+  input[type="email"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--ink);
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    appearance: none;
+  }
+ 
+  input::placeholder,
+  textarea::placeholder {
+    color: #7C8A7A;
+  }
+ 
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  button:focus-visible {
+    outline: 2.5px solid var(--focus);
+    outline-offset: 2px;
+  }
+ 
+  input:invalid:not(:placeholder-shown) {
+    border-color: var(--blaze);
+  }
+ 
+  select {
+    background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%),
+                       linear-gradient(135deg, var(--ink) 50%, transparent 50%);
+    background-position: calc(100% - 20px) center, calc(100% - 14px) center;
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+    padding-right: 40px;
+  }
+ 
+  textarea {
+    resize: vertical;
+    min-height: 110px;
+  }
+ 
+  .hint {
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+ 
+  /* Number field width */
+  input#number { max-width: 180px; }
+ 
+  /* Radios & checkboxes */
+  .choice-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+ 
+  .choice {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius);
+    padding: 11px 14px;
+  }
+ 
+  .choice input[type="radio"],
+  .choice input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--blaze);
+    flex-shrink: 0;
+  }
+ 
+  .choice label {
+    margin: 0;
+    font-weight: 500;
+    font-size: 0.96rem;
+    cursor: pointer;
+  }
+ 
+  /* ---------- Submit ---------- */
+ 
+  .submit-row {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+ 
+  button#submit {
+    font: inherit;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--blaze-ink);
+    background: var(--ink);
+    border: none;
+    border-radius: var(--radius);
+    padding: 14px 28px;
+    cursor: pointer;
+    transition: transform 120ms ease, background 120ms ease;
+  }
+ 
+  button#submit:hover { background: var(--focus); }
+  button#submit:active { transform: translateY(1px); }
+ 
+  #confirm {
+    font-size: 0.92rem;
+    color: var(--moss);
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 200ms ease;
+  }
+  #confirm.show { opacity: 1; }
+ 
+  @media (prefers-reduced-motion: reduce) {
+    button#submit { transition: none; }
+    #confirm { transition: none; }
+  }
+ 
+  @media (max-width: 520px) {
+    .wrap { padding: 44px 18px 72px; }
+    .stop { padding-left: 26px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+ 
+    <div class="trail-mark" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
+ 
+    <h1 id="title">Trailhead Notes</h1>
+    <p id="description">
+      We're plotting next season's routes and want your boot prints on the map.
+      Five minutes, a few questions about how you run trails — the blazes below
+      mark your way through.
+    </p>
+ 
+    <form id="survey-form">
+ 
+      <section class="stop">
+        <h2>Trailhead</h2>
+        <p class="stop-note">Let's start with who's joining us.</p>
+ 
+        <div class="field">
+          <label id="name-label" for="name">What should we call you?</label>
+          <input type="text" id="name" name="name" placeholder="Jordan Alvarez" required />
+        </div>
+ 
+        <div class="field">
+          <label id="email-label" for="email">Where can we send trail updates?</label>
+          <input type="email" id="email" name="email" placeholder="jordan@example.com" required />
+        </div>
+      </section>
+ 
+      <section class="stop mustard">
+        <h2>Your mileage</h2>
+        <p class="stop-note">A little history helps us calibrate the routes.</p>
+ 
+        <div class="field">
+          <label id="number-label" for="number">How many years have you been trail running?</label>
+          <input type="number" id="number" name="years" placeholder="e.g. 3" min="0" max="70" step="1" />
+          <p class="hint">Zero is a perfectly good answer — everyone starts somewhere.</p>
+        </div>
+ 
+        <div class="field">
+          <label for="dropdown">Which difficulty do you usually reach for?</label>
+          <select id="dropdown" name="difficulty">
+            <option value="" disabled selected>Choose one</option>
+            <option value="easy">Easy — mostly flat, well-marked</option>
+            <option value="moderate">Moderate — some climbing, loose footing</option>
+            <option value="difficult">Difficult — steep, technical, exposed</option>
+            <option value="pavement">Honestly, I mostly stick to pavement</option>
+          </select>
+        </div>
+      </section>
+ 
+      <section class="stop moss">
+        <h2>How you move</h2>
+        <p class="stop-note">Tell us your rhythm and what would pull you outside more often.</p>
+ 
+        <div class="field">
+          <label>How often do you get out on a trail?</label>
+          <div class="choice-group">
+            <div class="choice">
+              <input type="radio" id="freq-often" name="frequency" value="multiple-weekly" />
+              <label for="freq-often">Multiple times a week</label>
+            </div>
+            <div class="choice">
+              <input type="radio" id="freq-weekly" name="frequency" value="weekly" />
+              <label for="freq-weekly">About once a week</label>
+            </div>
+            <div class="choice">
+              <input type="radio" id="freq-monthly" name="frequency" value="few-monthly" />
+              <label for="freq-monthly">A few times a month</label>
+            </div>
+            <div class="choice">
+              <input type="radio" id="freq-rarely" name="frequency" value="rarely" />
+              <label for="freq-rarely">Rarely, but I want to change that</label>
+            </div>
+          </div>
+        </div>
+ 
+        <div class="field">
+          <label>Which features would get you out more?</label>
+          <div class="choice-group">
+            <div class="choice">
+              <input type="checkbox" id="feat-elevation" name="features" value="elevation-alerts" />
+              <label for="feat-elevation">Elevation-gain alerts</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="feat-offline" name="features" value="offline-maps" />
+              <label for="feat-offline">Offline maps</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="feat-hazards" name="features" value="hazard-reports" />
+              <label for="feat-hazards">Trail hazard &amp; wildlife reports</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="feat-groups" name="features" value="group-runs" />
+              <label for="feat-groups">Group run scheduling</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="feat-weather" name="features" value="weather-routes" />
+              <label for="feat-weather">Weather-based route suggestions</label>
+            </div>
+          </div>
+        </div>
+      </section>
+ 
+      <section class="stop ink">
+        <h2>Anything else</h2>
+        <p class="stop-note">Trail stories, complaints, wildlife sightings — all welcome.</p>
+ 
+        <div class="field">
+          <label for="comments">Additional comments</label>
+          <textarea id="comments" name="comments" placeholder="Tell us about your last run, or your dream route..."></textarea>
+        </div>
+ 
+        <div class="submit-row">
+          <button type="submit" id="submit">Send it in</button>
+          <span id="confirm" role="status">Thanks — see you on the trail.</span>
+        </div>
+      </section>
+ 
+    </form>
+  </div>
+ 
+  <script>
+    const form = document.getElementById('survey-form');
+    const confirm = document.getElementById('confirm');
+ 
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      confirm.classList.add('show');
+      setTimeout(() => confirm.classList.remove('show'), 3500);
+    });
+  </script>
+</body>
+</html>
